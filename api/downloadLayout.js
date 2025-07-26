@@ -1,5 +1,5 @@
 const express = require('express');
-const { getLayoutZipBuffer } = require('../functions/getLayoutFromGitHub');
+const { getLayoutZipBuffer } = require('../functions/getLayoutFromGithub');
 const { processZip } = require('../functions/processZip');
 const multer = require('multer');
 const upload = multer({ dest: 'temp_uploads/' });
