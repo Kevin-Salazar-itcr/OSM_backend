@@ -61,28 +61,17 @@ async function getLayoutZipBuffer(params) {
   try {
     const zip = new AdmZip();
 
+    // Agregar todos los archivos de layouts/<name>
     await fetchFilesRecursively(zip, repo, owner, branch, layoutPath, name);
 
+    // Agregar metadata/<name>.xml
     const { data: metadataFile } = await githubApi.get(
       `/repos/${owner}/${repo}/contents/${metadataPath}?ref=${branch}`
     );
-
     zip.addFile(`metadata/${name}.xml`, Buffer.from(metadataFile, 'utf8'));
 
-    const uploadsPath = path.join(__dirname, '../uploads');
-    if (!fs.existsSync(uploadsPath)) fs.mkdirSync(uploadsPath);
-
-    const zipPath = path.join(uploadsPath, `${name}.zip`);
-    zip.writeZip(zipPath);
-
-    const extractPath = uploadsPath;
-    if (!fs.existsSync(extractPath)) fs.mkdirSync(extractPath);
-
-    zip.extractAllTo(extractPath, true);
-
-    return {
-      message: `Layout downloaded from https://github.com/${owner}/${repo}/tree/${branch}/layouts/${name} to server.`
-    };
+    // ✅ Devolver buffer binario del ZIP
+    return zip.toBuffer();
 
   } catch (err) {
     console.error(err.message);
