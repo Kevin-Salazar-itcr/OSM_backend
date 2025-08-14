@@ -125,11 +125,12 @@ async function uploadZipToGitHub(zipPath) {
   });
 
   return {
-    message: `Branch '${branchName}' created and layout committed.`,
+    message: `Branch '${branchName}' created and layout committed. View it here: https://github.com/${GITHUB_USERNAME}/${FORK_REPO}/tree/${branchName}`,
     branch: branchName,
+    url: `https://github.com/${GITHUB_USERNAME}/${FORK_REPO}/tree/${branchName}`
   };
-}
 
+}
 
 module.exports = {
   uploadZipToGitHub,
