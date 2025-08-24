@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const cors = require('cors'); 
 const gitUploader = require('./api/upload');
 const zipDownloader = require('./api/downloadLayout');
 const cleaner = require('./api/cleaner');
@@ -8,13 +9,18 @@ const cleaner = require('./api/cleaner');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ✅ habilitar CORS SOLO para tu frontend de GitHub Pages
+app.use(cors({
+  origin: "https://kevin-salazar-itcr.github.io",   
+  methods: ["GET", "POST", "OPTIONS"],              
+  allowedHeaders: ["Content-Type", "Authorization"] 
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', gitUploader);
-
 app.use('/api', zipDownloader);
-
 app.use('/api/clean', cleaner);
 
 app.options('/', (req, res) => {
